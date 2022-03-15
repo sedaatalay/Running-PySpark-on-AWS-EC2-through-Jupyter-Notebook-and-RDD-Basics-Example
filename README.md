@@ -214,7 +214,7 @@ print(flatmap.take(5))
 #### 3- Pair RDD
 ##### Let’s turn our attention to another type of widely used RDDs: pair RDDs. Pair RDDs are widely used because they are, in a way, like dictionaries with key-value pairs. 
  
-##### -Map
+##### Map
 ###### We might want to apply some map function on the values of the RDD while leaving the keys unchanged.
 ```console
 rdd2=rdd.map(lambda x: (x,1))
@@ -223,7 +223,7 @@ for element in rdd2.collect():
 ``` 
 <img width="987" alt="Ekran Resmi 2022-03-15 12 20 17" src="https://user-images.githubusercontent.com/91700155/158367864-74aabca4-c3ea-42b7-93a2-cbb772f5bbdf.png">
 
-##### -Key/Value Pairs
+##### Key/Value Pairs
 ###### Key/value RDDs are commonly used to perform aggregations, and often we will do some initial ETL (extract, transform, and load) to get our data into a key/value format.
 ```console
 flatmap = rdd.flatMap(lambda line: line.split(' ')).map(str)
@@ -232,7 +232,7 @@ print(first.take(10))
 ``` 
 <img width="1019" alt="Ekran Resmi 2022-03-15 12 21 37" src="https://user-images.githubusercontent.com/91700155/158367991-95ef99e8-49f9-4f2d-b792-51fe6ae4e4a7.png">
 
-##### -ReduceByKey
+##### ReduceByKey
 ###### .reduce() is a way of reducing a RDD into something like a single value. The equivalent for pair RDDs is reduceByKey().
 ```console
 flatmap_rdd = rdd.flatMap(lambda line: line.split(' ')).map(str)
