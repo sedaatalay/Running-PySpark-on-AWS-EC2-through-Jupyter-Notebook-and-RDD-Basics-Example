@@ -42,13 +42,13 @@ sudo apt-get upgrade
 ```
  
 ### 11- Installing Pip & JAVA 
-#### Download Pip
+#### Download pip
 ```console
 sudo apt install python3-pip
 ```
 <img width="869" alt="Ekran Resmi 2022-03-15 13 33 43" src="https://user-images.githubusercontent.com/91700155/158366298-a4c12745-77ce-479c-8e5e-1406e5acedd8.png">
 
-#### Check Pip version
+#### Check pip version
 ```console
 pip3 --version
 ```
@@ -88,7 +88,7 @@ c.NotebookApp.iopub_data_rate_limit = 100000000
 
  
 ### 13- Installing Spark
-#### Make sure you have Java 8 or higher installed on your computer and then, visit the Spark downloads page(https://spark.apache.org/downloads.html).
+#### Make sure you have Java 8 or higher installed on your computer and then, visit the Spark downloads page (https://spark.apache.org/downloads.html).
  
 ```console
 pip3 install findspark
@@ -149,8 +149,12 @@ https://<your public dns>:8888/
 jupyter notebook stop 8888
 ```
 
-### 18- Create Sample Rdd Examples
-#### Upload a sample file to your jupyter notebook. (i.e. .txt, .csv, .parquet..). I choose .txt file. Then open new python3 file.
+<p>  <br />
+</p>
+ 
+ 
+###  Create Sample Rdd Examples
+#### 1- Upload a sample file to your jupyter notebook. (i.e. .txt, .csv, .parquet..). I choose .txt file. Then open new python3 file.
  
 <img width="1170" alt="Ekran Resmi 2022-03-15 14 01 11" src="https://user-images.githubusercontent.com/91700155/158367302-dd1525a9-7b46-4147-a49e-bd752a477ba0.png">
 <img width="224" alt="Ekran Resmi 2022-03-15 14 02 19" src="https://user-images.githubusercontent.com/91700155/158367331-b4155f4e-ee49-4343-8848-0789b949d5c3.png">
@@ -165,7 +169,7 @@ from pyspark import SparkConf, SparkContext
 ```
 <img width="1026" alt="Ekran Resmi 2022-03-15 12 19 55" src="https://user-images.githubusercontent.com/91700155/158367368-bd673cb7-9650-4372-815b-63e2d46fd886.png">
 
-#### RDD Basics
+#### 2- RDD Basics
 ##### The RDD API is the most basic way of dealing with data in Spark. RDD stands for “Resilient Distributed Dataset.” Although more abstracted, higher-level APIs such as Spark SQL or Spark dataframes are becoming increasingly popular, thus challenging RDD’s standing as a means of accessing and transforming data, it is a useful structure to learn nonetheless. One salient feature of RDDs is that computation in an RDD is parallelized across the cluster.
 
 ##### Spark Context
@@ -207,7 +211,7 @@ print(flatmap.take(5))
 <img width="1012" alt="Ekran Resmi 2022-03-15 12 21 28" src="https://user-images.githubusercontent.com/91700155/158367933-18adfb16-513a-4484-a457-ef0976095766.png">
 
  
-#### Pair RDD
+#### 3- Pair RDD
 ##### Let’s turn our attention to another type of widely used RDDs: pair RDDs. Pair RDDs are widely used because they are, in a way, like dictionaries with key-value pairs. 
  
 ##### -Map
@@ -220,6 +224,7 @@ for element in rdd2.collect():
 <img width="987" alt="Ekran Resmi 2022-03-15 12 20 17" src="https://user-images.githubusercontent.com/91700155/158367864-74aabca4-c3ea-42b7-93a2-cbb772f5bbdf.png">
 
 ##### -Key/Value Pairs
+###### Key/value RDDs are commonly used to perform aggregations, and often we will do some initial ETL (extract, transform, and load) to get our data into a key/value format.
 ```console
 flatmap = rdd.flatMap(lambda line: line.split(' ')).map(str)
 first = flatmap.mapValues(lambda value: value[0])
