@@ -36,10 +36,15 @@ ssh -i <pem file name> ubuntu@public-dns-name
 ```
 <img width="947" alt="Ekran Resmi 2022-03-07 12 28 58" src="https://user-images.githubusercontent.com/91700155/157004677-96f667a7-f4a3-42ab-9561-1b65318c926e.png">
  
-### 11- Installing Pip & JAVA 
-#### Download Pip
+### 11- Update the packages
 ```console
 sudo apt-get update
+sudo apt-get upgrade
+```
+ 
+### 12- Installing Pip & JAVA 
+#### Download Pip
+```console
 sudo apt install python3-pip
 ```
 #### Check Pip version
@@ -48,19 +53,36 @@ pip3 --version
 ```
 #### Download Java
 ```console
-sudo apt-get install openjdk-8-jdk
 pip3 install py4j
+sudo apt-get install openjdk-8-jdk
 ``` 
  
-### 12- Installing Jupyter Notebook
+### 13- Installing Jupyter Notebook
 ```console
 sudo apt install jupyter-notebook
 ```
+#### Configuring Jupyter Notebook settings
+```console
+jupyter notebook --generate-config
+```
+#### Jupyter Config File
+```console
+cd .jupyter
+nano jupyter_notebook_config.py
+```
 
-### 13- Installing Spark
+#### Inrecase the "#c.NotebookApp.iopub_data_rate_limit" value to "100000000" and remove the # from the front.
+```console
+c.NotebookApp.iopub_data_rate_limit = 100000000
+```
+<img width="946" alt="Ekran Resmi 2022-03-07 12 18 15" src="https://user-images.githubusercontent.com/91700155/157008480-f1fdf0c2-f4da-45aa-9243-2b96cd99ea8c.png">
+
+ 
+### 14- Installing Spark
 #### Make sure you have Java 8 or higher installed on your computer and then, visit the Spark downloads page(https://spark.apache.org/downloads.html).
  
 ```console
+pip3 install findspark
 wget https://archive.apache.org/dist/spark/spark-3.0.1/spark-3.0.1-bin-hadoop2.7.tgz 
 ```
 #### Unzip it and move it to your /opt folder 
@@ -92,22 +114,6 @@ export PYSPARK_DRIVER_PYTHON_OPTS='notebook --ip 0.0.0.0 --port=8888'
 source ~/.bashrc
 ```
 
-### 14- Configuring Jupyter Notebook settings
-```console
-jupyter notebook --generate-config
-```
-#### Jupyter Config File
-```console
-cd .jupyter
-nano jupyter_notebook_config.py
-```
-
-##### Change the "#c.NotebookApp.iopub_data_rate_limit" value and remove the # from the front.
-```console
-c.NotebookApp.iopub_data_rate_limit = 100000000
-```
-<img width="946" alt="Ekran Resmi 2022-03-07 12 18 15" src="https://user-images.githubusercontent.com/91700155/157008480-f1fdf0c2-f4da-45aa-9243-2b96cd99ea8c.png">
-
 ### 15- Connecting the Jupyter Notebook from your Web-Browser 
 ```console
 pyspark
@@ -116,7 +122,7 @@ pyspark
  
 <img width="921" alt="Z8G5B" src="https://user-images.githubusercontent.com/91700155/157012433-24514ed4-2328-4680-bda8-833acfecc183.png">
 
-### 16- Access your server with the following URL
+### 16- Jupyter Notebook Web UI
 ```console
 https://<your public dns>:8888/
 ```
@@ -125,8 +131,6 @@ https://<your public dns>:8888/
 ##### -Paste the copied token and create a new password if you want
 <img width="686" alt="Ekran Resmi 2022-03-07 12 22 09" src="https://user-images.githubusercontent.com/91700155/157012388-7ae3b1e5-8a1b-4b7e-96dd-1b2ce5935bc1.png">
 
-### 17- Jupyter Notebook Web UI
-<img width="1411" alt="Ekran Resmi 2022-03-07 12 26 53" src="https://user-images.githubusercontent.com/91700155/157010483-a6ce616c-90f2-4786-ad66-4753fc091732.png">
 
 #### To stop jupyter notebook services
 ```console
@@ -134,7 +138,9 @@ jupyter notebook stop 8888
 ```
 
 ### 18- Create Sample Rdd Examples
-#### Upload a sample file to your jupyter notebook. (i.e. .txt, .csv, .parquet..) Then open new python3 file.
+#### Upload a sample file to your jupyter notebook. (i.e. .txt, .csv, .parquet..). I choose .txt file. Then open new python3 file.
+ 
+
 ##### All we need is to install findspark package via pip install findspark. Then, on Jupyter, simply import Apache Spark via
 ```console
 import findspark
@@ -145,7 +151,7 @@ from pyspark import SparkConf, SparkContext
 ```
  
 #### RDD Basics
-##### The RDD API is the most basic way of dealing with data in Spark. RDD stands for “Resilient Distributed Dataset.” Although more abstracted, higher-level ##### APIs such as Spark SQL or Spark dataframes are becoming increasingly popular, thus challenging RDD’s standing as a means of accessing and transforming ##### data, it is a useful structure to learn nonetheless. One salient feature of RDDs is that computation in an RDD is parallelized across the cluster.
+##### The RDD API is the most basic way of dealing with data in Spark. RDD stands for “Resilient Distributed Dataset.” Although more abstracted, higher-level APIs such as Spark SQL or Spark dataframes are becoming increasingly popular, thus challenging RDD’s standing as a means of accessing and transforming data, it is a useful structure to learn nonetheless. One salient feature of RDDs is that computation in an RDD is parallelized across the cluster.
 
 <p>  <br />
 </p>
@@ -171,7 +177,7 @@ words = sc.parallelize(rdd_list)
 ``` 
 
 ##### -Count, CountbyValue
-###### Another useful function is .count() and .countByValue(). As you might have easily guessed, these functions are literally used to count the number of ###### elements itself or their number of occurrences. 
+###### Another useful function is .count() and .countByValue(). As you might have easily guessed, these functions are literally used to count the number of elements itself or their number of occurrences. 
 ```console
 countByValue = words.countByValue()
 print(countByValue)
@@ -184,7 +190,7 @@ print(flatmap.take(5))
 ``` 
  
 #### Pair RDD
-##### Let’s turn our attention to another type of widely used RDDs: pair RDDs. Pair RDDs are widely used because they are, in a way, like dictionaries with key-##### value pairs. 
+##### Let’s turn our attention to another type of widely used RDDs: pair RDDs. Pair RDDs are widely used because they are, in a way, like dictionaries with key-value pairs. 
  
 ##### -Map
 ###### We might want to apply some map function on the values of the RDD while leaving the keys unchanged.
