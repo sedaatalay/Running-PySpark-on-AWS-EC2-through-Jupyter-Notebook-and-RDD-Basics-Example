@@ -1,4 +1,4 @@
-# RDD Examples with Jupter Notebook on AWS EC2 Server
+# Running PySpark on an AWS EC2 through Jupyter Notebook and create RDD Basics Example
 <p> <br/ >
  
 ### 1- Login to AWS and launch an instance
@@ -30,96 +30,93 @@
 chmod 400 <pem file name>.pem
 ```
 ### 10- Connect using SSH
+#### The -L specifies that the given port on the local (client) host will be forwarded to the given host and the port on the remote side #### (AWS). This means that anything running on the second port number (i.e. 8888) on AWS will appear on the first port number (i.e. 8000) #### on your local computer. You have to change 8888 to the port where Jupyter Notebook is running.
 ```console
 ssh -i <pem file name> ubuntu@public-dns-name
 ```
 <img width="947" alt="Ekran Resmi 2022-03-07 12 28 58" src="https://user-images.githubusercontent.com/91700155/157004677-96f667a7-f4a3-42ab-9561-1b65318c926e.png">
-
-### 11- Installing Jupyter Notebook
-#### Download Anaconda
+ 
+### 11- Installing Pip & JAVA 
+#### Download Pip
 ```console
-wget https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
+sudo apt-get update
+sudo apt install python3-pip
 ```
-<img width="927" alt="Ekran Resmi 2022-03-07 12 06 33" src="https://user-images.githubusercontent.com/91700155/157005185-13cd87a2-b246-4b6e-915c-6f08e5b78a8d.png">
-
-#### Run bash on the file 
+#### Check Pip version
 ```console
-bash Anaconda3-2019.03-Linux-x86_64.sh
+pip3 --version
 ```
-<img width="927" alt="Ekran Resmi 2022-03-07 12 06 50" src="https://user-images.githubusercontent.com/91700155/157005760-9b910999-972b-4b67-8327-be92959655f5.png">
-
-##### -To all "yes"
-<img width="914" alt="G5BbD" src="https://user-images.githubusercontent.com/91700155/157006451-985845d2-240e-4fcf-9b34-2d9a86944509.png">
-<img width="948" alt="Ekran Resmi 2022-03-07 12 14 14" src="https://user-images.githubusercontent.com/91700155/157012088-70800d9f-7541-4308-82ea-8edf559b1462.png">
-
-##### -If you miss the second "yes" write to:
+#### Download Java
 ```console
-source ~/anaconda3/bin/activate
+sudo apt-get install openjdk-8-jdk
+pip3 install py4j
+``` 
+ 
+### 12- Installing Jupyter Notebook
+```console
+sudo apt install jupyter-notebook
 ```
-#### Configuring Jupyter Notebook’s Path
+
+### 13- Installing Spark
+#### Make sure you have Java 8 or higher installed on your computer and then, visit the Spark downloads page(https://spark.apache.org/downloads.html).
+ 
 ```console
-nano .bashrc
+wget https://archive.apache.org/dist/spark/spark-3.0.1/spark-3.0.1-bin-hadoop2.7.tgz 
+```
+#### Unzip it and move it to your /opt folder 
+```console
+tar xvf spark-*
+sudo mv spark-3.0.1-bin-hadoop2.7 /opt/spark-3.0.1
+```
+#### Create a symbolic link
+```console
+sudo ln -s /opt/spark-3.0.1 /opt/spark
+```
+
+#### Configure Spark & Java & PySpark driver to use Jupyter Notebook
+```console
+nano ~/.bashrc
 ```
 ##### -Write into:
 ```console
-export PATH=/home/ubuntu/anaconda3/bin:$PATH
+export SPARK_HOME=/opt/spark
+export PATH=$SPARK_HOME/bin:$PATH
+export JAVA_HOME='/usr/lib/jvm/java-8-openjdk-amd64'
+export PATH=$JAVA_HOME/bin:$PATH
+export PYSPARK_PYTHON=python3
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook --ip 0.0.0.0 --port=8888'
 ```
-<img width="945" alt="Ekran Resmi 2022-03-07 12 14 43" src="https://user-images.githubusercontent.com/91700155/157012117-9ae6e4be-e4f0-40c5-a733-998396075738.png">
-
 #### After saving path, you need to run
 ```console
-source .bashrc
+source ~/.bashrc
 ```
-<img width="943" alt="Ekran Resmi 2022-03-07 12 15 04" src="https://user-images.githubusercontent.com/91700155/157006789-509c8cbe-96e1-43aa-b545-68cb551f5a80.png">
 
-#### Configuring Jupyter Notebook settings
+### 14- Configuring Jupyter Notebook settings
 ```console
 jupyter notebook --generate-config
-ipython
-from IPython.lib import passwd
-passwd()
 ```
-##### -Give a password 
-<img width="480" alt="Ekran Resmi 2022-03-07 12 46 54" src="https://user-images.githubusercontent.com/91700155/157007622-8e6386d6-c436-4310-811c-e3ea4b1a067f.png">
-
-##### -Copy the "out[2]:" line 
-<img width="946" alt="Ekran Resmi 2022-03-07 12 16 45" src="https://user-images.githubusercontent.com/91700155/157012189-b3632d73-3925-4dbf-badc-2920b69fd74f.png">
-
 #### Jupyter Config File
 ```console
 cd .jupyter
-vim jupyter_notebook_config.py_
+nano jupyter_notebook_config.py
 ```
-<img width="928" alt="Ekran Resmi 2022-03-07 12 17 11" src="https://user-images.githubusercontent.com/91700155/157008315-0f848675-73c6-4f9b-b21c-4548e993b3c7.png">
 
-##### Write into:
+##### Change the "#c.NotebookApp.iopub_data_rate_limit" value and remove the # from the front.
 ```console
-conf = get_config()
-
-conf.NotebookApp.ip = '0.0.0.0'
-conf.NotebookApp.password = u'<Paste the out[2] line>'
-conf.NotebookApp.port = 8888
-conf.NotebookApp.allow_origin = '*'
+c.NotebookApp.iopub_data_rate_limit = 100000000
 ```
 <img width="946" alt="Ekran Resmi 2022-03-07 12 18 15" src="https://user-images.githubusercontent.com/91700155/157008480-f1fdf0c2-f4da-45aa-9243-2b96cd99ea8c.png">
 
-#### Create a directory for your notebooks and ufw allow the port
+### 15- Connecting the Jupyter Notebook from your Web-Browser 
 ```console
-mkdir MyNotebooks
-sudo ufw allow 8888
+pyspark
 ```
-<img width="942" alt="Ekran Resmi 2022-03-07 12 19 08" src="https://user-images.githubusercontent.com/91700155/157008815-fee05b79-d026-43d6-b9fe-09902753fe91.png">
-
-#### Connecting to your EC2 Jupyter Server
-```console
-jupyter notebook --ip 0.0.0.0 --port 8888
-```
-<img width="946" alt="Ekran Resmi 2022-03-07 12 19 48" src="https://user-images.githubusercontent.com/91700155/157008908-8ed8415d-a9a3-4cde-920c-7c1b4f6a14b8.png">
-
-##### -Copy the given token
+##### -As you can see, there is a URL given in the last line. Copy the contents of the URL after token=, i.e. c6f2835c731caf65c9413a866113c015ae2a589c0a9abc31 in my case.
+ 
 <img width="921" alt="Z8G5B" src="https://user-images.githubusercontent.com/91700155/157012433-24514ed4-2328-4680-bda8-833acfecc183.png">
 
-#### Access your server with the following URL
+### 16- Access your server with the following URL
 ```console
 https://<your public dns>:8888/
 ```
@@ -128,7 +125,7 @@ https://<your public dns>:8888/
 ##### -Paste the copied token and create a new password if you want
 <img width="686" alt="Ekran Resmi 2022-03-07 12 22 09" src="https://user-images.githubusercontent.com/91700155/157012388-7ae3b1e5-8a1b-4b7e-96dd-1b2ce5935bc1.png">
 
-#### Jupyter Notebook Web UI
+### 17- Jupyter Notebook Web UI
 <img width="1411" alt="Ekran Resmi 2022-03-07 12 26 53" src="https://user-images.githubusercontent.com/91700155/157010483-a6ce616c-90f2-4786-ad66-4753fc091732.png">
 
 #### To stop jupyter notebook services
@@ -136,7 +133,86 @@ https://<your public dns>:8888/
 jupyter notebook stop 8888
 ```
 
+### 18- Create Sample Rdd Examples
+#### Upload a sample file to your jupyter notebook. (i.e. .txt, .csv, .parquet..) Then open new python3 file.
+##### All we need is to install findspark package via pip install findspark. Then, on Jupyter, simply import Apache Spark via
+```console
+import findspark
+findspark.init()
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark import SparkConf, SparkContext
+```
+ 
+#### RDD Basics
+##### The RDD API is the most basic way of dealing with data in Spark. RDD stands for “Resilient Distributed Dataset.” Although more abstracted, higher-level ##### APIs such as Spark SQL or Spark dataframes are becoming increasingly popular, thus challenging RDD’s standing as a means of accessing and transforming ##### data, it is a useful structure to learn nonetheless. One salient feature of RDDs is that computation in an RDD is parallelized across the cluster.
 
+<p>  <br />
+</p>
+ 
+##### Spark Context
+###### A Spark context is the entry point to Spark that is needed to deal with RDDs
+```console
+conf = SparkConf().setMaster("local").setAppName("app")
+sc = SparkContext.getOrCreate()
+spark = SparkSession.builder.getOrCreate()
+```
+
+##### We convert the uploaded text file to Rdd.
+```console
+rdd = sc.textFile(f'BTC-GBP.txt')
+rdd.take(4)
+``` 
+ 
+##### We use .collect() to turn the RDD into an iterable, specifically a list
+```console
+rdd_list = rdd.collect()
+words = sc.parallelize(rdd_list)
+``` 
+
+##### -Count, CountbyValue
+###### Another useful function is .count() and .countByValue(). As you might have easily guessed, these functions are literally used to count the number of ###### elements itself or their number of occurrences. 
+```console
+countByValue = words.countByValue()
+print(countByValue)
+``` 
+##### Flatmap
+###### flatMap(). For this example, we load a text file containing prime numbers and create a RDD.
+```console
+flatmap = rdd.flatMap(lambda line: line.split(' ')).map(str)
+print(flatmap.take(5))
+``` 
+ 
+#### Pair RDD
+##### Let’s turn our attention to another type of widely used RDDs: pair RDDs. Pair RDDs are widely used because they are, in a way, like dictionaries with key-##### value pairs. 
+ 
+##### -Map
+###### We might want to apply some map function on the values of the RDD while leaving the keys unchanged.
+```console
+rdd2=rdd.map(lambda x: (x,1))
+for element in rdd2.collect():
+    print(element)
+``` 
+ 
+##### -Key/Value Pairs
+```console
+flatmap = rdd.flatMap(lambda line: line.split(' ')).map(str)
+first = flatmap.mapValues(lambda value: value[0])
+print(first.take(10))
+``` 
+
+##### -ReduceByKey
+###### .reduce() is a way of reducing a RDD into something like a single value. The equivalent for pair RDDs is reduceByKey().
+```console
+flatmap_rdd = rdd.flatMap(lambda line: line.split(' ')).map(str)
+raw_pair = flatmap_rdd.map(lambda word: (word, 1))
+pair_nums = raw_pair.reduceByKey(lambda x, y: 1 + y)
+print(pair_nums.take(5))
+``` 
+
+
+
+ 
 <p>  <br />
 </p>
 
