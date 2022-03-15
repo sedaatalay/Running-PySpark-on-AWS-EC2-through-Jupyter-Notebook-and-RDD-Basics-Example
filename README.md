@@ -141,7 +141,7 @@ pyspark
 ```console
 https://<your public dns>:8888/
 ```
-##### -Paste the copied token and create a new password if you want
+##### Paste the copied token and create a new password if you want
 <img width="1419" alt="Ekran Resmi 2022-03-15 13 58 45" src="https://user-images.githubusercontent.com/91700155/158367261-5ebab40c-10cb-4ccc-b2be-fae41004d24b.png">
 
 #### To stop jupyter notebook services
