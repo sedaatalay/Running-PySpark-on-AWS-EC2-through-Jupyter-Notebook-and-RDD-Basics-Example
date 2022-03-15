@@ -244,8 +244,8 @@ print(pair_nums.take(5))
 
 
 
- 
-<p>  <br />
+####### Thank you :) 
+<p>  <br /><br />
 </p>
 
 ### Seda Atalay
