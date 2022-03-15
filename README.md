@@ -132,7 +132,7 @@ source ~/.bashrc
 ```console
 pyspark
 ```
-##### -As you can see, there is a URL given in the last line. Copy the contents of the URL after token=, i.e. c6f2835c731caf65c9413a866113c015ae2a589c0a9abc31 in my case.
+##### As you can see, there is a URL given in the last line. Copy the contents of the URL after token=, i.e. c6f2835c731caf65c9413a866113c015ae2a589c0a9abc31 in my case.
  
 <img width="869" alt="Ekran Resmi 2022-03-15 13 57 48" src="https://user-images.githubusercontent.com/91700155/158367223-9aae431f-7c07-4ee4-b8a4-11d903e04cf3.png">
  
