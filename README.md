@@ -28,7 +28,7 @@
 chmod 400 <pem file name>.pem
 ```
 ### 9- Connect using SSH
-#### The -L specifies that the given port on the local (client) host will be forwarded to the given host and the port on the remote side #### (AWS). This means that anything running on the second port number (i.e. 8888) on AWS will appear on the first port number (i.e. 8000) #### on your local computer. You have to change 8888 to the port where Jupyter Notebook is running.
+#### The -L specifies that the given port on the local (client) host will be forwarded to the given host and the port on the remote side (AWS). This means that anything running on the second port number (i.e. 8888) on AWS will appear on the first port number (i.e. 8000) on your local computer. You have to change 8888 to the port where Jupyter Notebook is running.
 ```console
 ssh -i <pem file name> ubuntu@public-dns-name
 ```
