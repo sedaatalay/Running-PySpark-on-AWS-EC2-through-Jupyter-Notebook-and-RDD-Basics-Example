@@ -1,4 +1,4 @@
-# Running PySpark on an AWS EC2 through Jupyter Notebook and create RDD Basics Example
+# Running PySpark on AWS EC2 through Jupyter Notebook and RDD Basics Example
 <p> <br/ >
  
 ### 1- Login to AWS and launch an instance
