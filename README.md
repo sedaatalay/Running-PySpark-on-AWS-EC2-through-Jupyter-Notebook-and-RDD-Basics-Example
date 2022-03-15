@@ -79,7 +79,7 @@ nano jupyter_notebook_config.py
 ```
 <img width="869" alt="Ekran Resmi 2022-03-15 13 42 42" src="https://user-images.githubusercontent.com/91700155/158366579-034835c0-473f-402b-bde0-d7f4f91513e9.png">
  
-#### Inrecase the "#c.NotebookApp.iopub_data_rate_limit" value to "100000000" and remove the # from the front.
+#### Increase the "#c.NotebookApp.iopub_data_rate_limit" value to "100000000" and remove the # from the front.
 ```console
 c.NotebookApp.iopub_data_rate_limit = 100000000
 ```
